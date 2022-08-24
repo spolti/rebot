@@ -31,6 +31,7 @@ import javax.enterprise.inject.Alternative;
 import io.quarkus.arc.DefaultBean;
 import io.quarkus.arc.Priority;
 import okhttp3.OkHttpClient;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Alternative
 @Priority(100)
@@ -38,12 +39,20 @@ import okhttp3.OkHttpClient;
 @DefaultBean
 public class RebotOkHttpClient implements IRebotOkHttpClient {
 
+    @ConfigProperty(name = "xyz.rebasing.rebot.dump.okhhtp.requests", defaultValue = "false")
+    boolean dumpMessages;
+
     @Override
     public OkHttpClient get() {
-        return new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
+                .readTimeout(60, TimeUnit.SECONDS);
+
+        if(dumpMessages) {
+            builder.interceptors().add(new LoggingInterceptor());
+        }
+
+        return builder.build();
     }
 }
