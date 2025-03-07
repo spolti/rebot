@@ -53,20 +53,16 @@ import xyz.rebasing.rebot.service.persistence.repository.PacktRepository;
 @ApplicationScoped
 public class PacktNotifier {
 
-    private final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
-
     private static final String FREE_LEARNING_URL = "https://www.packtpub.com/free-learning";
     private static final String PACKT_DAILY_OFFER_ENDPOINT = "https://static.packt-cdn.com/products/%s/summary";
-
+    private final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
     Cache<String, Object> cache = Caffeine.newBuilder().build();
-
-    @Inject
-    private OutcomeMessageProcessor messageSender;
-
-    @Inject
-    private PacktRepository repository;
     @Inject
     ObjectMapper objectMapper;
+    @Inject
+    private OutcomeMessageProcessor messageSender;
+    @Inject
+    private PacktRepository repository;
 
     public String get(String locale) {
         DailyOffer dailyOffer = (DailyOffer) cache.getIfPresent("book");
@@ -100,8 +96,8 @@ public class PacktNotifier {
 
             if (response.code() != 200) {
                 log.warnv("Failed to connect in the endpoint {0}, status code is: {1}",
-                          loadDailyOfferRequest.url(),
-                          response.code());
+                        loadDailyOfferRequest.url(),
+                        response.code());
             }
 
             BufferedReader reader = new BufferedReader(new StringReader(response.body().string()));
@@ -124,7 +120,7 @@ public class PacktNotifier {
                 }
                 if (getDailyOfferResponse.code() != 200) {
                     log.warnv("Failed to connect in the endpoint {0}, status code is: {1}",
-                              getDailyOfferRequest.url(), getDailyOfferResponse.code());
+                            getDailyOfferRequest.url(), getDailyOfferResponse.code());
                 }
 
                 DailyOffer dailyOffer = objectMapper.readValue(getDailyOfferResponse.body().string(), DailyOffer.class);
@@ -136,8 +132,8 @@ public class PacktNotifier {
                 cache.put("book", dailyOffer);
 
                 repository.get().stream().forEach(packtNotification ->
-                                                          this.notify(packtNotification.getChatId(),
-                                                                      packtNotification.getLocale())
+                        this.notify(packtNotification.getChatId(),
+                                packtNotification.getLocale())
                 );
             }
         } catch (final Exception e) {
@@ -153,8 +149,8 @@ public class PacktNotifier {
             channel = message.getMessage().getFrom().getFirstName();
         }
         return repository.register(new PacktNotification(message.getMessage().getChat().getId(),
-                                                         channel,
-                                                         locale));
+                channel,
+                locale));
     }
 
     public String unregisterNotification(MessageUpdate message, String locale) {
@@ -165,13 +161,13 @@ public class PacktNotifier {
             channel = message.getMessage().getFrom().getFirstName();
         }
         return repository.unregister(new PacktNotification(message.getMessage().getChat().getId(),
-                                                           channel,
-                                                           locale));
+                channel,
+                locale));
     }
 
     private void notify(Long chatId, String locale) {
         messageSender.processOutgoingMessage(new Message(0, new Chat(chatId), this.get(locale)),
-                                             false,
-                                             0);
+                false,
+                0);
     }
 }

@@ -109,7 +109,6 @@
       <groupId>xyz.rebasing</groupId>
       <artifactId>rebot-welcome-message-plugin</artifactId>
     </dependency>
-
     <!-- Fix native compilation -->
     <dependency>
       <groupId>com.github.javaparser</groupId>
@@ -120,6 +119,10 @@
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-symbol-solver-core</artifactId>
       <version>3.24.2</version>
+    </dependency>
+    <dependency>
+      <groupId>xyz.rebasing</groupId>
+      <artifactId>rebot-dimep-plugin</artifactId>
     </dependency>
   </dependencies>
   <build>

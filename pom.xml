@@ -197,6 +197,11 @@
       </dependency>
       <dependency>
         <groupId>xyz.rebasing</groupId>
+        <artifactId>rebot-dimep-plugin</artifactId>
+        <version>${version.xyz.rebasing.rebot.plugins}</version>
+      </dependency>
+      <dependency>
+        <groupId>xyz.rebasing</groupId>
         <artifactId>rebot-sed-plugin</artifactId>
         <version>${version.xyz.rebasing.rebot.plugins}</version>
       </dependency>

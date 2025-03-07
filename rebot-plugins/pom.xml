@@ -69,6 +69,7 @@
     <module>rebot-brazil-postalcode-plugin</module>
     <module>rebot-chuck-norris-plugin</module>
     <module>rebot-currency-plugin</module>
+    <module>rebot-dimep-plugin</module>
     <module>rebot-faq-plugin</module>
     <module>rebot-karma-plugin</module>
     <module>rebot-packt-free-learning-plugin</module>
